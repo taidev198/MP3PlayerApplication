@@ -9,7 +9,7 @@ import java.util.List;
 public interface AudioDataSource {
 
     interface LoadAudioCallback{
-        void onAudioLoaded(List<Audio> tasks);
+        void onAudioLoaded(List<Audio> audio);
 
         void onAudioNotAvailable();
     }

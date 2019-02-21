@@ -3,6 +3,8 @@ package com.example.mp3playerapplication.data.source;
 import android.support.annotation.NonNull;
 
 import com.example.mp3playerapplication.audio.model.Audio;
+import com.example.mp3playerapplication.data.source.local.AudioLocalDataRSource;
+import com.example.mp3playerapplication.data.source.remote.AudioRemoteDataSource;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -14,7 +16,7 @@ public class AudioRepository implements AudioDataSource {
 
     private static AudioRepository INSTANCE = null;
     private final AudioDataSource mAudioLocalDataSource;
-    private final AudioDataSource mAudioRemoteDataSource;
+
 
     /**
      * This variable has package local visibility so it can be accessed from tests.
@@ -27,30 +29,30 @@ public class AudioRepository implements AudioDataSource {
      */
     boolean mCacheIsDirty = false;
 
-    public AudioRepository(AudioDataSource mAudioLocalDataSource,
-                           AudioDataSource mAudioRemoteDataSource) {
+
+    public AudioRepository(AudioDataSource mAudioLocalDataSource) {
         this.mAudioLocalDataSource = mAudioLocalDataSource;
-        this.mAudioRemoteDataSource = mAudioRemoteDataSource;
     }
+
+
 
 
     /**
      * Returns the single instance of this class, creating it if necessary.
      *
-     * @param audioRemoteDataSource the backend data source
-     * @param audioLocalDataSource  the device storage data source
+     *
+     * @param audioLocalDataRSource  the device storage data source
      * @return the {@link AudioRepository} instance
      */
-    public static AudioRepository getInstance(AudioDataSource audioRemoteDataSource,
-                                              AudioDataSource audioLocalDataSource) {
-        if (INSTANCE == null) {
-            INSTANCE = new AudioRepository(audioRemoteDataSource, audioLocalDataSource);
-        }
-        return INSTANCE;
-    }
+    public static AudioRepository getInstance(AudioLocalDataRSource audioLocalDataRSource){
 
+            if (INSTANCE == null) {
+                INSTANCE = new AudioRepository( audioLocalDataRSource);
+            }
+            return INSTANCE;
+    }
     /**
-     * Used to force {@link #getInstance(AudioDataSource, AudioDataSource)} to create a new instance
+     * Used to force  to create a new instance
      * next time it's called.
      */
     public static void destroyInstance() {

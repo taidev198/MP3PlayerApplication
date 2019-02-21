@@ -58,21 +58,22 @@ public class LoadingAudioAsyncTask extends AsyncTask<Void, Void, List<Audio>> {
             String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
             String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
             String duration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-            String data = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+            String pathfile = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
             String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
 
             int intDuration = Integer.parseInt(duration);
             Bitmap bitmap = BitmapFactory.decodeResource(resources,
                     R.drawable.ic_launcher_background);
-            Audio song = new Audio(data, title, artist, album, id, intDuration, bitmap);
+            Audio song = new Audio(pathfile, title, artist, album, id, intDuration, bitmap);
             if (title == null) {
-                String[] songNames = data.split("/");
+                String[] songNames = pathfile.split("/");
                 int len = songNames.length;
                 String name = songNames[len - 1];
                 int nameLen = name.length();
                 song.setTitle(name.substring(0, nameLen - 4));
             }
-            System.out.println( title+ ".mp3");
+
+
             songs.add(song);
 //            Log.e("SONG", cursor.getString(2));
         }

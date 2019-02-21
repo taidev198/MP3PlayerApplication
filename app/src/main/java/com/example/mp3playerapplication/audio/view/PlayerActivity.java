@@ -2,27 +2,28 @@ package com.example.mp3playerapplication.audio.view;
 
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.mp3playerapplication.R;
-import com.example.mp3playerapplication.audio.PlayerContract;
-import com.example.mp3playerapplication.audio.PlayerPresenter;
+import com.example.mp3playerapplication.audio.AudioContract;
+import com.example.mp3playerapplication.audio.AudioListAdapter;
+import com.example.mp3playerapplication.audio.AudioPresenter;
+import com.example.mp3playerapplication.audio.model.Audio;
+import com.example.mp3playerapplication.data.source.AudioRepository;
+import com.example.mp3playerapplication.data.source.local.AudioLocalDataRSource;
 import com.example.mp3playerapplication.utils.PermissionInfo;
 
-public class PlayerActivity extends AppCompatActivity implements PlayerContract.View {
+import java.util.List;
+
+public class PlayerActivity extends AppCompatActivity implements AudioContract.View {
 
     RecyclerView playerListView;
-    PlayerPresenter playerPresenter;
-    PlayerListViewAdapter playerListViewAdapter;
+    AudioPresenter audioPresenter;
+    AudioListAdapter playerListViewAdapter;
     RecyclerView.LayoutManager layoutManager;
 
     @Override
@@ -30,9 +31,7 @@ public class PlayerActivity extends AppCompatActivity implements PlayerContract.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         requestPermission();
-//        playerPresenter = new PlayerPresenter(this, this);
-//        playerPresenter.load();
-       // new LoadingAudioAsyncTask(getContentResolver(), getResources(), new Handler());
+
     }
 
     @Override
@@ -47,12 +46,7 @@ public class PlayerActivity extends AppCompatActivity implements PlayerContract.
 
     @Override
     public void showListSongs() {
-        playerListView = findViewById(R.id.recycler_view);
-        layoutManager = new LinearLayoutManager(this);
-        playerListView.setHasFixedSize(true);
-        playerListView.setLayoutManager(layoutManager);
-        playerListViewAdapter = new PlayerListViewAdapter();
-        playerListView.setAdapter(playerListViewAdapter);
+
 
     }
 
@@ -67,41 +61,34 @@ public class PlayerActivity extends AppCompatActivity implements PlayerContract.
     }
 
     @Override
-    public void setPresenter(PlayerContract.Presenter presenter) {
+    public void showListAudio(List<Audio> listAudio) {
+        playerListView = findViewById(R.id.recycler_view);
+        layoutManager = new LinearLayoutManager(this);
+        playerListView.setHasFixedSize(true);
+        playerListView.setLayoutManager(layoutManager);
+        playerListViewAdapter = new AudioListAdapter();
+        playerListView.setAdapter(playerListViewAdapter);
+
+        playerListViewAdapter.setAudioList(listAudio);
+        playerListViewAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showNoDataLoaded() {
 
     }
 
-    private class PlayerListViewAdapter extends RecyclerView.Adapter<PlayerListViewAdapter.MyHolder> {
+    @Override
+    public void showLoadingAudioError() {
 
-
-        @NonNull
-        @Override
-        public MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate( R.layout.card_view,viewGroup, false);
-
-            return new MyHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
-                myHolder.textView.setText("this is content");
-        }
-
-        @Override
-        public int getItemCount() {
-            return 10;
-        }
-
-
-        class MyHolder extends RecyclerView.ViewHolder{
-            TextView textView;
-            MyHolder(@NonNull View itemView) {
-                super(itemView);
-                textView = itemView.findViewById(R.id.content);
-                textView.setText("this is content");
-            }
-        }
     }
+
+    @Override
+    public void setPresenter(AudioContract.Presenter presenter) {
+
+    }
+
+
 
     private void requestPermission(){
         PermissionInfo.PERMISSION_COUNT = 0;
@@ -116,11 +103,15 @@ public class PlayerActivity extends AppCompatActivity implements PlayerContract.
                 PermissionInfo.PERMISSION_COUNT++;
             }
         }
-        playerPresenter = new PlayerPresenter(this, this);
-        playerPresenter.load();
-
-
+        loadAudio();
         PermissionInfo.PERMISSION_COUNT = 0;
+    }
+
+    private void loadAudio(){
+        AudioLocalDataRSource audioLocalDataRSource =  AudioLocalDataRSource.getInstance(getContentResolver(), getResources());
+        AudioRepository audioRepository = AudioRepository.getInstance(audioLocalDataRSource);
+        audioPresenter = new AudioPresenter(audioRepository, this);
+        audioPresenter.loadAudioList();
     }
 
 

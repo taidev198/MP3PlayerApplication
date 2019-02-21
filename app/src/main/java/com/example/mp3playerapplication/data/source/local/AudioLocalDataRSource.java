@@ -37,7 +37,6 @@ public class AudioLocalDataRSource implements AudioDataSource {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-
                 Handler handler = new Handler(new Handler.Callback() {
                     @Override
                     public boolean handleMessage(Message msg) {
