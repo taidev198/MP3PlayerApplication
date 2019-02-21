@@ -1,4 +1,4 @@
-package com.example.mp3playerapplication.player;
+package com.example.mp3playerapplication.audio;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 
+import com.example.mp3playerapplication.audio.model.Audio;
 import com.example.mp3playerapplication.utils.AudioUtils;
 import com.example.mp3playerapplication.R;
 
@@ -29,7 +30,7 @@ public class LoadingAudioAsyncTask extends AsyncTask<Void, Void, List<Audio>> {
     private Resources resources;
     private List<Audio> list;
     private MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-    public LoadingAudioAsyncTask( ContentResolver contentResolver, Resources resources, Handler handler){
+    public LoadingAudioAsyncTask(ContentResolver contentResolver, Resources resources, Handler handler){
         mHandler = handler;
         mContentResolver = contentResolver;
         this.resources = resources;
@@ -42,7 +43,7 @@ public class LoadingAudioAsyncTask extends AsyncTask<Void, Void, List<Audio>> {
         return list;
     }
 
-    public List<Audio> findAllMedia() {
+    private List<Audio> findAllMedia() {
         String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
         String[] projection = AudioUtils.PROJECTIONS;
         Cursor cursor = mContentResolver.query(
@@ -88,6 +89,7 @@ public class LoadingAudioAsyncTask extends AsyncTask<Void, Void, List<Audio>> {
         message.obj = list;
 //        Log.e("WHERE ARE U NOW?", "onPostExecute: Process go here" );
         mHandler.sendMessage(message);
+//        Toast.makeText(this, "DONE", Toast.LENGTH_SHORT).show();
     }
 
     private Uri getAlbumUri(Context mContext, String album_id){

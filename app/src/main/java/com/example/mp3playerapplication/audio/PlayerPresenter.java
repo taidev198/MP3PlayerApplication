@@ -1,4 +1,4 @@
-package com.example.mp3playerapplication.player;
+package com.example.mp3playerapplication.audio;
 
 
 import android.Manifest;
@@ -11,15 +11,19 @@ import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 
 
+import com.example.mp3playerapplication.audio.model.Audio;
+
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class PlayerPresenter implements PlayerContract.Presenter {
 
     PlayerContract.View mPlayerView;
     Context mContext;
 
-    PlayerPresenter(PlayerContract.View mPlayerView, Context context){
+    public PlayerPresenter(PlayerContract.View mPlayerView, Context context){
         this.mPlayerView = mPlayerView;
         this.mPlayerView.setPresenter(this);
         this.mContext = context;
@@ -31,7 +35,7 @@ public class PlayerPresenter implements PlayerContract.Presenter {
     public void load() {
         this.mPlayerView.showProcessing();
         this.mPlayerView.hideProcessing();
-        getAllSongsFromExternalStorage();
+        List<Audio> list = new ArrayList<>();
         this.mPlayerView.showListSongs();
     }
 

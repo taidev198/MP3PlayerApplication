@@ -1,4 +1,4 @@
-package com.example.mp3playerapplication.player;
+package com.example.mp3playerapplication.audio;
 
 import com.example.mp3playerapplication.BasePresenter;
 import com.example.mp3playerapplication.BaseView;

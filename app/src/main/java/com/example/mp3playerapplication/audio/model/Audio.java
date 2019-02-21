@@ -1,4 +1,4 @@
-package com.example.mp3playerapplication.player;
+package com.example.mp3playerapplication.audio.model;
 
 import android.graphics.Bitmap;
 import android.os.Parcel;

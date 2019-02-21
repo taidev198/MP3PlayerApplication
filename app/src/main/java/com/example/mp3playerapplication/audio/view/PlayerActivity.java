@@ -1,9 +1,7 @@
-package com.example.mp3playerapplication.player;
+package com.example.mp3playerapplication.audio.view;
 
 import android.content.pm.PackageManager;
-import android.database.DataSetObserver;
 import android.os.Build;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -13,14 +11,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.mp3playerapplication.R;
+import com.example.mp3playerapplication.audio.PlayerContract;
+import com.example.mp3playerapplication.audio.PlayerPresenter;
 import com.example.mp3playerapplication.utils.PermissionInfo;
-
-import java.util.zip.Inflater;
 
 public class PlayerActivity extends AppCompatActivity implements PlayerContract.View {
 
@@ -120,10 +116,10 @@ public class PlayerActivity extends AppCompatActivity implements PlayerContract.
                 PermissionInfo.PERMISSION_COUNT++;
             }
         }
-//        playerPresenter = new PlayerPresenter(this, this);
-//        playerPresenter.load();
+        playerPresenter = new PlayerPresenter(this, this);
+        playerPresenter.load();
 
-        new LoadingAudioAsyncTask(getContentResolver(), getResources(), new Handler()).execute();
+
         PermissionInfo.PERMISSION_COUNT = 0;
     }
 

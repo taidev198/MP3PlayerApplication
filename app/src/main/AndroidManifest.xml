@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".player.PlayerActivity">
+        <activity android:name=".audio.view.PlayerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
