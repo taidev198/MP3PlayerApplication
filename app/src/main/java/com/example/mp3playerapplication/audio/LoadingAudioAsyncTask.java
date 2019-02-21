@@ -72,10 +72,7 @@ public class LoadingAudioAsyncTask extends AsyncTask<Void, Void, List<Audio>> {
                 int nameLen = name.length();
                 song.setTitle(name.substring(0, nameLen - 4));
             }
-
-
             songs.add(song);
-//            Log.e("SONG", cursor.getString(2));
         }
 
         cursor.close();

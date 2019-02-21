@@ -1,21 +1,16 @@
 package com.example.mp3playerapplication.audio;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.mp3playerapplication.R;
 import com.example.mp3playerapplication.audio.model.Audio;
 import com.example.mp3playerapplication.audio.service.PlayTrackService;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +41,8 @@ public class AudioListAdapter extends RecyclerView.Adapter<AudioListAdapter.MyHo
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(myHolder.textView.getContext(), PlayTrackService.class);
-                intent.putExtra("path_file", audio.getArtist());
+                intent.putExtra("path_file", audio.getPathfile());
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 myHolder.textView.getContext().startService(intent);
                 Toast.makeText(myHolder.textView.getContext(), audio.getTitle() + " " +i, Toast.LENGTH_SHORT).show();
             }
