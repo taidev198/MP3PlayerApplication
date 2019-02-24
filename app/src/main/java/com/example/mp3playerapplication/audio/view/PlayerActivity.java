@@ -66,7 +66,7 @@ public class PlayerActivity extends AppCompatActivity implements AudioContract.V
         layoutManager = new LinearLayoutManager(this);
         playerListView.setHasFixedSize(true);
         playerListView.setLayoutManager(layoutManager);
-        playerListViewAdapter = new AudioListAdapter();
+        playerListViewAdapter = new AudioListAdapter(this);
         playerListView.setAdapter(playerListViewAdapter);
 
         playerListViewAdapter.setAudioList(listAudio);

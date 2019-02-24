@@ -1,11 +1,14 @@
 package com.example.mp3playerapplication.audio;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.mp3playerapplication.R;
@@ -16,9 +19,21 @@ import java.util.List;
 
 public class AudioListAdapter extends RecyclerView.Adapter<AudioListAdapter.MyHolder> {
     List<Audio> mAudio;
+    final boolean[] isRunning = {false};
+    SeekBar seekBar;
+    Context mContext;
+    RecyclerView recyclerView;
+    public interface receivedFileCallback{
+        void onReceived(String filepath);
+    }
 
+    receivedFileCallback mCallback;
 
-
+    public AudioListAdapter(Activity context){
+        mContext = context;
+        recyclerView = ((Activity) mContext).findViewById(R.id.recycler_view);
+        seekBar = ((Activity) mContext).findViewById(R.id.seek_bar);
+    }
     public void setAudioList(List<Audio> audio){
         if (mAudio != null){
             mAudio.clear();
@@ -33,18 +48,50 @@ public class AudioListAdapter extends RecyclerView.Adapter<AudioListAdapter.MyHo
         return new MyHolder(v);
     }
 
+    /**This method is called for each items on recycler view*/
     @Override
     public void onBindViewHolder(@NonNull final MyHolder myHolder, final int i) {
         final Audio audio = mAudio.get(i);
+        final Context mContext = myHolder.textView.getContext();
+
         myHolder.textView.setText(audio.getTitle());
+        final Intent intent = new Intent(mContext, PlayTrackService.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         myHolder.textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(myHolder.textView.getContext(), PlayTrackService.class);
-                intent.putExtra("path_file", audio.getPathfile());
-                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                myHolder.textView.getContext().startService(intent);
-                Toast.makeText(myHolder.textView.getContext(), audio.getTitle() + " " +i, Toast.LENGTH_SHORT).show();
+                seekBar.setProgress(50);
+                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                    }
+                });
+                if (!isRunning[0]){
+                    intent.putExtra("TITLE",audio.getTitle());
+                    intent.putExtra("ARTISTS",audio.getArtist());
+                    intent.putExtra("DURATION",audio.getDuration());
+                    intent.putExtra("path_file", audio.getPathfile());
+                    mContext.startService(intent);
+                    isRunning[0] = true;
+                    Toast.makeText(myHolder.textView.getContext(), audio.getTitle() + " " +i, Toast.LENGTH_SHORT).show();
+                }else {
+                    mContext.stopService(intent);
+                    Intent i1 = new Intent(mContext, PlayTrackService.class);
+                    i1.putExtra("path_file", audio.getPathfile());
+                    mContext.startService(i1);
+                    isRunning[0] = true;
+                }
             }
         });
     }
