@@ -1,4 +1,4 @@
-package com.example.mp3playerapplication.audio;
+package com.example.mp3playerapplication.audio.adapter;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
@@ -6,6 +6,9 @@ import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+
+import com.example.mp3playerapplication.audio.MusicLibrary;
+import com.example.mp3playerapplication.audio.PlaybackInfoListener;
 
 public final class MediaPlayerAdapter extends PlayerAdapter {
 

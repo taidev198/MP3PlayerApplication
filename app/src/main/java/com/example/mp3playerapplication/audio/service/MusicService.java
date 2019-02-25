@@ -1,4 +1,4 @@
-package com.example.mp3playerapplication.audio;
+package com.example.mp3playerapplication.audio.service;
 
 import android.app.Notification;
 import android.content.Intent;
@@ -12,6 +12,12 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
+
+import com.example.mp3playerapplication.audio.MediaNotificationManager;
+import com.example.mp3playerapplication.audio.MusicLibrary;
+import com.example.mp3playerapplication.audio.PlaybackInfoListener;
+import com.example.mp3playerapplication.audio.adapter.MediaPlayerAdapter;
+import com.example.mp3playerapplication.audio.adapter.PlayerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

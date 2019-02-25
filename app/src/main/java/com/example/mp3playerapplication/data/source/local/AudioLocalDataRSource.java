@@ -7,7 +7,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 
 import com.example.mp3playerapplication.data.source.AudioDataSource;
-import com.example.mp3playerapplication.audio.LoadingAudioAsyncTask;
+import com.example.mp3playerapplication.audio.asynctask.LoadingAudioAsyncTask;
 import com.example.mp3playerapplication.audio.model.Audio;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.mp3playerapplication.audio;
+package com.example.mp3playerapplication.audio.adapter;
 
 import android.app.Activity;
 import android.content.Context;

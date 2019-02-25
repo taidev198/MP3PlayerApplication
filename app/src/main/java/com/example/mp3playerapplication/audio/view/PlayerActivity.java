@@ -10,8 +10,8 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.mp3playerapplication.R;
 import com.example.mp3playerapplication.audio.AudioContract;
-import com.example.mp3playerapplication.audio.AudioListAdapter;
-import com.example.mp3playerapplication.audio.AudioPresenter;
+import com.example.mp3playerapplication.audio.adapter.AudioListAdapter;
+import com.example.mp3playerapplication.audio.presenter.AudioPresenter;
 import com.example.mp3playerapplication.audio.model.Audio;
 import com.example.mp3playerapplication.data.source.AudioRepository;
 import com.example.mp3playerapplication.data.source.local.AudioLocalDataRSource;

@@ -20,6 +20,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
 import com.example.mp3playerapplication.R;
+import com.example.mp3playerapplication.audio.service.MusicService;
 import com.example.mp3playerapplication.audio.view.PlayerActivity;
 
 public class MediaNotificationManager {
