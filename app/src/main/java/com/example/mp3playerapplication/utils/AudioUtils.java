@@ -15,12 +15,12 @@ public class AudioUtils {
             MediaStore.Audio.Media.ALBUM,   //6
     };
 
-      public static final String PLAY = "PLAY",
-        PAUSE= "PAUSE",
-        RESUME = "RESUME",
-        NEXT = "NEXT",
-        BACK = "BACK",
-        STOP = "STOP";
+      public static final String PLAY = "com.example.mp3playerapplication.PLAY",
+        PAUSE= "com.example.mp3playerapplication.PAUSE",
+        RESUME = "com.example.mp3playerapplication.RESUME",
+        NEXT = "com.example.mp3playerapplication.NEXT",
+        BACK = "com.example.mp3playerapplication.BACK",
+        STOP = "com.example.mp3playerapplication.STOP";
 
 
 

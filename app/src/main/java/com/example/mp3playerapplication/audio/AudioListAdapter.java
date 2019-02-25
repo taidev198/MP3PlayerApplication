@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.example.mp3playerapplication.R;
 import com.example.mp3playerapplication.audio.model.Audio;
 import com.example.mp3playerapplication.audio.service.PlayTrackService;
+import com.example.mp3playerapplication.utils.AudioUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,12 +84,15 @@ public class AudioListAdapter extends RecyclerView.Adapter<AudioListAdapter.MyHo
                     intent.putExtra("ARTISTS",audio.getArtist());
                     intent.putExtra("DURATION",audio.getDuration());
                     intent.putExtra("path_file", audio.getPathfile());
+                    intent.setAction(AudioUtils.PLAY);
+                    System.out.println(audio.getPathfile());
                     mContext.startService(intent);
                     isRunning[0] = true;
                     Toast.makeText(myHolder.textView.getContext(), audio.getTitle() + " " +i, Toast.LENGTH_SHORT).show();
                 }else {
                     mContext.stopService(intent);
                     Intent i1 = new Intent(mContext, PlayTrackService.class);
+
                     i1.putExtra("path_file", audio.getPathfile());
                     mContext.startService(i1);
                     isRunning[0] = true;
