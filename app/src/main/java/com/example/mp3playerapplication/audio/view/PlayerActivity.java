@@ -14,7 +14,7 @@ import com.example.mp3playerapplication.audio.adapter.AudioListAdapter;
 import com.example.mp3playerapplication.audio.presenter.AudioPresenter;
 import com.example.mp3playerapplication.audio.model.Audio;
 import com.example.mp3playerapplication.data.source.AudioRepository;
-import com.example.mp3playerapplication.data.source.local.AudioLocalDataRSource;
+import com.example.mp3playerapplication.data.source.local.AudioLocalDataSource;
 import com.example.mp3playerapplication.utils.PermissionInfo;
 
 import java.util.List;
@@ -108,8 +108,8 @@ public class PlayerActivity extends AppCompatActivity implements AudioContract.V
     }
 
     private void loadAudio(){
-        AudioLocalDataRSource audioLocalDataRSource =  AudioLocalDataRSource.getInstance(getContentResolver(), getResources());
-        AudioRepository audioRepository = AudioRepository.getInstance(audioLocalDataRSource);
+        AudioLocalDataSource audioLocalDataSource =  AudioLocalDataSource.getInstance(getContentResolver(), getResources());
+        AudioRepository audioRepository = AudioRepository.getInstance(audioLocalDataSource);
         audioPresenter = new AudioPresenter(audioRepository, this);
         audioPresenter.loadAudioList();
     }

@@ -33,6 +33,7 @@ import com.example.mp3playerapplication.audio.view.PlayerActivity;
 import com.example.mp3playerapplication.utils.AudioUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**https://stackoverflow.com/questions/45194576/android-create-notification-w-media-controls-on-service-start*/
@@ -43,7 +44,7 @@ public class PlayTrackService extends Service implements
         MediaPlayer.OnErrorListener,
         MediaPlayer.OnSeekCompleteListener,
         MediaPlayer.OnInfoListener,
-        MediaPlayer.OnBufferingUpdateListener,
+                                MediaPlayer.OnBufferingUpdateListener,
         AudioManager.OnAudioFocusChangeListener{
     private static final String CHANNEL_ID = "1";
 
@@ -67,6 +68,7 @@ public class PlayTrackService extends Service implements
     private List<Audio> audioList;
     private int audioIndex = -1;
     private boolean isPlaying= true;
+    private int currentID =-1;
     private Audio activeAudio; //an object on the currently playing audio
 
     String filepath;
@@ -79,20 +81,28 @@ public class PlayTrackService extends Service implements
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         activeAudio = new Audio();
-        activeAudio.setPathfile(intent.getStringExtra("path_file"));
-        System.out.println(mediaSession == null);
-        System.out.println(intent.getAction());
+        activeAudio.setFilepath(intent.getStringExtra("path_file"));
         if (mediaSession != null){
             String action = intent.getAction();
-            if (action.equals(AudioUtils.PAUSE)){
-                buildNotification(AudioUtils.PAUSE);
-                pauseMedia();
-            }else if (action.equals(AudioUtils.PLAY)){
-                buildNotification(AudioUtils.PLAY);
-                resumeMedia();
+            switch (action){
+                case AudioUtils.PAUSE:  buildNotification(AudioUtils.PAUSE);
+                                        pauseMedia();
+                    System.out.println("pause");
+                                        break;
+                case AudioUtils.PLAY: buildNotification(AudioUtils.PLAY);
+                                      resumeMedia();
+                                      break;
+                case AudioUtils.BACK: buildNotification(AudioUtils.PLAY);
+                                        skipToPrevious();
+                                        break;
+                 default:
+                        skipToNext();
+                        buildNotification(AudioUtils.PLAY);
             }
         }
        else{
+            audioIndex = Integer.parseInt(intent.getStringExtra("CURRENT_ID"));
+            audioList = (List<Audio>) intent.getSerializableExtra("AUDIO_LIST");
            try {
                initMediaSession();
                initMediaPlayer();
@@ -115,24 +125,12 @@ public class PlayTrackService extends Service implements
             stopMedia();
             mediaPlayer.release();
         }
-        removeAudioFocus();
+
         //Disable the PhoneStateListener
 
         removeNotification();
     }
 
-    @Override
-    public void onReceived(String filepath) {
-        this.filepath = filepath;
-        mediaPlayer.stop();
-        try {
-            mediaPlayer.setDataSource(filepath);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void initMediaPlayer() {
         if (mediaPlayer == null)
@@ -150,7 +148,7 @@ public class PlayTrackService extends Service implements
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
             // Set the data source to the mediaFile location
-            mediaPlayer.setDataSource(activeAudio.getPathfile());
+            mediaPlayer.setDataSource(activeAudio.getFilepath());
         } catch (IOException e) {
             e.printStackTrace();
             stopSelf();
@@ -325,7 +323,6 @@ public class PlayTrackService extends Service implements
     }
 
     private void skipToPrevious() {
-
         if (audioIndex == 0) {
             //if first in playlist
             //set index to the last of audioList
@@ -335,9 +332,7 @@ public class PlayTrackService extends Service implements
             //get previous in playlist
             activeAudio = audioList.get(--audioIndex);
         }
-
         //Update stored index
-
         stopMedia();
         //reset mediaPlayer
         mediaPlayer.reset();
@@ -403,7 +398,6 @@ public class PlayTrackService extends Service implements
                         .setContentTitle(activeAudio.getAlbum())
                         .setContentInfo(activeAudio.getTitle())
                         .setDefaults(Notification.DEFAULT_SOUND)
-
                         // Add playback actions
                         .addAction(android.R.drawable.ic_media_previous, "previous", playbackAction(3))
                         .addAction(notificationAction, "pause", play_pauseAction)
@@ -417,7 +411,7 @@ public class PlayTrackService extends Service implements
         playbackAction.putExtra("TITLE",activeAudio.getTitle());
         playbackAction.putExtra("ARTISTS",activeAudio.getArtist());
         playbackAction.putExtra("DURATION",activeAudio.getDuration());
-        playbackAction.putExtra("path_file", activeAudio.getPathfile());
+        playbackAction.putExtra("path_file", activeAudio.getFilepath());
         switch (actionNumber) {
             case 0:
                 // Play
@@ -509,7 +503,12 @@ public class PlayTrackService extends Service implements
 
     }
 
-    public static class MediaReceiver extends BroadcastReceiver{
+    @Override
+    public void onReceived(List<Audio> audio) {
+            audioList = new ArrayList<>(audio);
+    }
+
+    public  class MediaReceiver extends BroadcastReceiver{
 
         @Override
         public void onReceive(Context context, Intent intent) {

@@ -3,8 +3,7 @@ package com.example.mp3playerapplication.data.source;
 import android.support.annotation.NonNull;
 
 import com.example.mp3playerapplication.audio.model.Audio;
-import com.example.mp3playerapplication.data.source.local.AudioLocalDataRSource;
-import com.example.mp3playerapplication.data.source.remote.AudioRemoteDataSource;
+import com.example.mp3playerapplication.data.source.local.AudioLocalDataSource;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -41,13 +40,13 @@ public class AudioRepository implements AudioDataSource {
      * Returns the single instance of this class, creating it if necessary.
      *
      *
-     * @param audioLocalDataRSource  the device storage data source
+     * @param audioLocalDataSource  the device storage data source
      * @return the {@link AudioRepository} instance
      */
-    public static AudioRepository getInstance(AudioLocalDataRSource audioLocalDataRSource){
+    public static AudioRepository getInstance(AudioLocalDataSource audioLocalDataSource){
 
             if (INSTANCE == null) {
-                INSTANCE = new AudioRepository( audioLocalDataRSource);
+                INSTANCE = new AudioRepository(audioLocalDataSource);
             }
             return INSTANCE;
     }

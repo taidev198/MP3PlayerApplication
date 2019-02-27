@@ -12,20 +12,20 @@ import com.example.mp3playerapplication.audio.model.Audio;
 
 import java.util.List;
 
-public class AudioLocalDataRSource implements AudioDataSource {
+public class AudioLocalDataSource implements AudioDataSource {
 
-    private static AudioLocalDataRSource INSTANCE = null;
+    private static AudioLocalDataSource INSTANCE = null;
     ContentResolver contentResolver;
     Resources resources;
 
-    private AudioLocalDataRSource(ContentResolver contentResolver, Resources resources){
+    private AudioLocalDataSource(ContentResolver contentResolver, Resources resources){
         this.contentResolver = contentResolver;
         this.resources = resources;
     }
 
-    public static AudioLocalDataRSource getInstance(ContentResolver contentResolver, Resources resources){
+    public static AudioLocalDataSource getInstance(ContentResolver contentResolver, Resources resources){
         if (INSTANCE == null){
-            return new AudioLocalDataRSource(contentResolver, resources);
+            return new AudioLocalDataSource(contentResolver, resources);
         }
         return INSTANCE;
     }

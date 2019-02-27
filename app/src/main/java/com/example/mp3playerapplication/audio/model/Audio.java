@@ -4,8 +4,10 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Audio implements Parcelable {
-    private String pathfile, title, artist, album, id;
+import java.io.Serializable;
+
+public class Audio implements Parcelable, Serializable {
+    private String filepath, title, artist, album, id;
     private int duration;
     private Bitmap bitmapAudio;
 
@@ -14,7 +16,7 @@ public class Audio implements Parcelable {
     }
 
     protected Audio(Parcel in) {
-        pathfile = in.readString();
+        filepath = in.readString();
         title = in.readString();
         artist = in.readString();
         album = in.readString();
@@ -42,7 +44,7 @@ public class Audio implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(pathfile);
+        dest.writeString(filepath);
         dest.writeString(title);
         dest.writeString(artist);
         dest.writeString(album);
@@ -51,9 +53,9 @@ public class Audio implements Parcelable {
         dest.writeParcelable(bitmapAudio, flags);
     }
 
-    public Audio(String pathfile, String title, String artist, String album,
+    public Audio(String filepath, String title, String artist, String album,
                  String id, int duration, Bitmap bitmapAudio) {
-        this.pathfile = pathfile;
+        this.filepath = filepath;
         this.title = title;
         this.artist = artist;
         this.album = album;
@@ -62,12 +64,12 @@ public class Audio implements Parcelable {
         this.bitmapAudio = bitmapAudio;
     }
 
-    public String getPathfile() {
-        return pathfile;
+    public String getFilepath() {
+        return filepath;
     }
 
-    public void setPathfile(String pathfile) {
-        this.pathfile = pathfile;
+    public void setFilepath(String filepath) {
+        this.filepath = filepath;
     }
 
     public String getTitle() {

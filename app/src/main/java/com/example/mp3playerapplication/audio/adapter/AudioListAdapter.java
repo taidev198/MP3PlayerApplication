@@ -16,6 +16,7 @@ import com.example.mp3playerapplication.audio.model.Audio;
 import com.example.mp3playerapplication.audio.service.PlayTrackService;
 import com.example.mp3playerapplication.utils.AudioUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class AudioListAdapter extends RecyclerView.Adapter<AudioListAdapter.MyHo
     Context mContext;
     RecyclerView recyclerView;
     public interface receivedFileCallback{
-        void onReceived(String filepath);
+        void onReceived(List<Audio> audio);
     }
 
     receivedFileCallback mCallback;
@@ -79,21 +80,24 @@ public class AudioListAdapter extends RecyclerView.Adapter<AudioListAdapter.MyHo
 
                     }
                 });
+                mCallback = new PlayTrackService();
+                mCallback.onReceived(mAudio);
                 if (!isRunning[0]){
+                    intent.putExtra("CURRENT_ID", Integer.toString(i));
+                    intent.putExtra("AUDIO_LIST", (Serializable) mAudio);
                     intent.putExtra("TITLE",audio.getTitle());
                     intent.putExtra("ARTISTS",audio.getArtist());
                     intent.putExtra("DURATION",audio.getDuration());
-                    intent.putExtra("path_file", audio.getPathfile());
+                    intent.putExtra("path_file", audio.getFilepath());
                     intent.setAction(AudioUtils.PLAY);
-                    System.out.println(audio.getPathfile());
+                    System.out.println(audio.getFilepath());
                     mContext.startService(intent);
                     isRunning[0] = true;
                     Toast.makeText(myHolder.textView.getContext(), audio.getTitle() + " " +i, Toast.LENGTH_SHORT).show();
                 }else {
                     mContext.stopService(intent);
                     Intent i1 = new Intent(mContext, PlayTrackService.class);
-
-                    i1.putExtra("path_file", audio.getPathfile());
+                    i1.putExtra("path_file", audio.getFilepath());
                     mContext.startService(i1);
                     isRunning[0] = true;
                 }
