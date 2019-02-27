@@ -23,7 +23,6 @@ import java.util.List;
 public class AudioListAdapter extends RecyclerView.Adapter<AudioListAdapter.MyHolder> {
     List<Audio> mAudio;
     final boolean[] isRunning = {false};
-    SeekBar seekBar;
     Context mContext;
     RecyclerView recyclerView;
     public interface receivedFileCallback{
@@ -35,7 +34,6 @@ public class AudioListAdapter extends RecyclerView.Adapter<AudioListAdapter.MyHo
     public AudioListAdapter(Activity context){
         mContext = context;
         recyclerView = ((Activity) mContext).findViewById(R.id.recycler_view);
-        seekBar = ((Activity) mContext).findViewById(R.id.seek_bar);
     }
     public void setAudioList(List<Audio> audio){
         if (mAudio != null){
@@ -63,23 +61,6 @@ public class AudioListAdapter extends RecyclerView.Adapter<AudioListAdapter.MyHo
         myHolder.textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                seekBar.setProgress(50);
-                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-
-                    }
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-
-                    }
-                });
                 mCallback = new PlayTrackService();
                 mCallback.onReceived(mAudio);
                 if (!isRunning[0]){
